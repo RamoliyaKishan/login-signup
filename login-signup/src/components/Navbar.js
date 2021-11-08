@@ -5,7 +5,6 @@ import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
 import { getToken, getAccess, removeAccess } from '../utils/commonFunctions';
 
 const Navbar = () => {
-	console.log('token', getToken());
 	const history = useHistory();
 	const handleLogout = () => {
 		if (window.confirm('Are you sure to logout ???')) {
@@ -16,13 +15,7 @@ const Navbar = () => {
 			window.location.reload();
 		}
 	};
-	// useEffect(() => {
-	// 	if (getToken() !== null) {
-	// 		setIsAccess(true);
-	// 	} else {
-	// 		setIsAccess(false);
-	// 	}
-	// }, [getToken()]);
+
 	return (
 		<AppBar position='static'>
 			<Toolbar>

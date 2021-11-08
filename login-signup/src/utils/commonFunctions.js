@@ -2,7 +2,11 @@ const getToken = () => {
 	return localStorage.getItem('token');
 };
 
-const isAccessible = (path) => {
+const removeToken = () => {
+	return localStorage.removeItem('token');
+};
+
+const isAccessible = () => {
 	if (getToken()) return true;
 	return false;
 };
@@ -19,4 +23,11 @@ const removeAccess = () => {
 	return localStorage.removeItem('access');
 };
 
-export { getToken, isAccessible, getAccess, setAccess, removeAccess };
+export {
+	getToken,
+	removeToken,
+	isAccessible,
+	getAccess,
+	setAccess,
+	removeAccess,
+};

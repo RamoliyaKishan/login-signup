@@ -13,10 +13,10 @@ server.use(jsonServer.defaults());
 
 const SECRET_KEY = '123456789';
 
-const expiresIn = '1h';
-
 // Create a token from a payload
 function createToken(payload) {
+	let expiresIn;
+	payload.remember ? (expiresIn = '30d') : (expiresIn = '1h');
 	return jwt.sign(payload, SECRET_KEY, { expiresIn });
 }
 
@@ -35,6 +35,35 @@ function isAuthenticated({ email, password }) {
 		) !== -1
 	);
 }
+
+// jwt verification
+const verify = (req, res, next) => {
+	if (
+		req.headers.authorization === undefined ||
+		req.headers.authorization.split(' ')[0] !== 'Bearer'
+	) {
+		const status = 401;
+		const message = 'Error in authorization format';
+		res.status(status).json({ status, message });
+		return;
+	}
+	try {
+		let verifyTokenResult;
+		verifyTokenResult = verifyToken(req.headers.authorization.split(' ')[1]);
+
+		if (verifyTokenResult instanceof Error) {
+			const status = 401;
+			const message = 'Access token not provided';
+			res.status(status).json({ status, message });
+			return;
+		}
+		next();
+	} catch (err) {
+		const status = 401;
+		const message = 'Error access_token is revoked';
+		res.status(status).json({ status, message });
+	}
+};
 
 // Register New User
 server.post('/auth/register', (req, res) => {
@@ -89,45 +118,20 @@ server.post('/auth/register', (req, res) => {
 // Login to one of the users from ./users.json
 server.post('/auth/login', (req, res) => {
 	console.log('login endpoint called; request body:');
-	console.log(req.body);
-	const { email, password } = req.body;
-	// if (isAuthenticated({ email, password }) === false) {
-	// 	const status = 401;
-	// 	const message = 'Incorrect email or password';
-	// 	res.status(status).json({ status, message });
-	// 	return;
-	// }
-	const access_token = createToken({ email, password });
+	console.log('body', req.body);
+	const { email, password, remember } = req.body;
+
+	const access_token = createToken({ email, password, remember });
 	console.log('Access Token:' + access_token);
-	res.status(200).json({ access_token });
+	res.status(200).json({ email, password, remember, access_token });
 });
 
-server.use(/^(?!\/auth).*$/, (req, res, next) => {
-	if (
-		req.headers.authorization === undefined ||
-		req.headers.authorization.split(' ')[0] !== 'Bearer'
-	) {
-		const status = 401;
-		const message = 'Error in authorization format';
-		res.status(status).json({ status, message });
-		return;
-	}
-	try {
-		let verifyTokenResult;
-		verifyTokenResult = verifyToken(req.headers.authorization.split(' ')[1]);
+// get users from reqres
+server.get('/api/users', verify, (req, res) => {
+	console.log('getting all users');
+	console.log('res', res);
 
-		if (verifyTokenResult instanceof Error) {
-			const status = 401;
-			const message = 'Access token not provided';
-			res.status(status).json({ status, message });
-			return;
-		}
-		next();
-	} catch (err) {
-		const status = 401;
-		const message = 'Error access_token is revoked';
-		res.status(status).json({ status, message });
-	}
+	res.status(200).json('all users are here!!!!!!!!!!!!');
 });
 
 server.use(router);

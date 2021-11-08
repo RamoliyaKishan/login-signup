@@ -15,9 +15,9 @@ import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import axios from 'axios';
 import { signUpStyles } from '../signup/style';
 import { setAccess } from '../../utils/commonFunctions';
+import api from '../../utils/axios';
 
 const Login = () => {
 	const classes = signUpStyles();
@@ -46,7 +46,7 @@ const Login = () => {
 				}
 
 				if (oneUser.password === values.password) {
-					axios
+					api
 						.post('http://localhost:8000/auth/login', values)
 						.then((response) => {
 							localStorage.setItem('user', JSON.stringify(oneUser));
@@ -133,6 +133,8 @@ const Login = () => {
 										control={<Checkbox color='primary' />}
 										label='Remember Me'
 										labelPlacement='end'
+										onChange={formik.handleChange}
+										value={formik.values.password}
 									/>
 									<Box align='center'>
 										<Button

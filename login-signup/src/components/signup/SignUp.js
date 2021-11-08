@@ -16,8 +16,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 import { signUpStyles } from './style';
+import api from '../../utils/axios';
 
 const SignUp = () => {
 	const classes = signUpStyles();
@@ -64,7 +64,7 @@ const SignUp = () => {
 			if (findUser) {
 				alert('This Email Id is already exist!!!');
 			} else {
-				axios
+				api
 					.post('http://localhost:8000/auth/register', values)
 					.then((response) => {
 						data.push(values);

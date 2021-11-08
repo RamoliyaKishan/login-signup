@@ -6,7 +6,7 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => (
 	<Route
 		{...rest}
 		render={(props) =>
-			isAccessible(path) ? <Component {...props} /> : <Redirect to='/login' />
+			isAccessible() ? <Component {...props} /> : <Redirect to='/login' />
 		}
 	/>
 );
