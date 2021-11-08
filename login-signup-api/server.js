@@ -40,14 +40,14 @@ function isAuthenticated({ email, password }) {
 server.post('/auth/register', (req, res) => {
 	console.log('register endpoint called; request body:');
 	console.log(req.body);
-	// const { name, contact, email, password } = req.body;
+	const { name, contact, email, password } = req.body;
 
-	// if (isAuthenticated({ email, password }) === true) {
-	// 	const status = 401;
-	// 	const message = 'Email and Password already exist';
-	// 	res.status(status).json({ status, message });
-	// 	return;
-	// }
+	if (isAuthenticated({ email, password }) === true) {
+		const status = 401;
+		const message = 'Email and Password already exist';
+		res.status(status).json({ status, message });
+		return;
+	}
 
 	fs.readFile('./users.json', (err, data) => {
 		if (err) {

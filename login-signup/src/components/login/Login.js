@@ -52,7 +52,7 @@ const Login = () => {
 							localStorage.setItem('user', JSON.stringify(oneUser));
 							localStorage.setItem('token', response.data.access_token);
 							setAccess();
-							history.push('/about');
+							history.push('/dashboard');
 							window.location.reload();
 						})
 						.catch((err) => {
