@@ -20,11 +20,17 @@ const Dashboard = () => {
 	return (
 		<Container className={classes.root}>
 			<Paper component={Box} width='50%' p={5} mx='auto'>
-				<Typography align='center' color='primary'>
+				<Typography component='div' align='center' color='primary'>
 					<h1>Welcom {user.name}</h1>
 					<h2>💜💛💚💙</h2>
 				</Typography>
-				<Button onClick={() => handleGetUsers()}>get users</Button>
+				<Button
+					color='secondary'
+					variant='contained'
+					onClick={() => handleGetUsers()}
+				>
+					get users
+				</Button>
 			</Paper>
 		</Container>
 	);
